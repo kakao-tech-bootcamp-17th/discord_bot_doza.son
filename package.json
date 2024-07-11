@@ -1,0 +1,16 @@
+{
+  "name": "discord_bot_doza.son",
+  "version": "1.0.0",
+  "description": "개발자들을 위한 명언을 출력하는 디스코드 챗봇 만들기",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "discord.js": "^14.15.3"
+  }
+}
