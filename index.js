@@ -1,32 +1,26 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-const fs = require('fs');
+const dotenv = require('dotenv');
 
-//config로 토큰값 관리
-const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-
-// 봇 토큰
-const token = config.token;
+dotenv.config();
 
 // 명언 API URL
-const quoteAPI = 'https://api.quotable.io/random';
+const QUOTEAPI = 'https://api.quotable.io/random';
 
 // 명언을 출력할 채널 ID (디스코드에서 해당 채널의 ID를 가져와서 설정)
-const channelId = config.channel;  // 이 부분을 실제 채널 ID로 대체하세요.
+const channelId = process.env.CHANNEL;  
 
 // 일정 시간 간격 
 const intervalTime = 60000;
 
-client.once('ready', () => {
-    console.log('Ready!');
-    
+client.once('ready', () => {    
     // 일정 시간마다 명언을 출력하는 함수 호출
     setInterval(async () => {
         try {
             const channel = await client.channels.fetch(channelId);
             if (channel && channel.isTextBased()) {
-                const response = await axios.get(quoteAPI);
+                const response = await axios.get(QUOTEAPI);
                 const quote = response.data.content + " - " + response.data.author;
                 channel.send(quote);
             } else {
@@ -43,7 +37,7 @@ client.on('messageCreate', async message => {
     if (message.content === '!quote') {
         try {
             // 명언 가져오기
-            const response = await axios.get(quoteAPI);
+            const response = await axios.get(QUOTEAPI);
             const quote = response.data.content + " - " + response.data.author;
             message.channel.send(quote);
         } catch (error) {
@@ -64,4 +58,4 @@ client.on('messageCreate', async message => {
 });
 
 // 봇 로그인
-client.login(token);
+client.login(process.env.DISCORD_TOKEN);
